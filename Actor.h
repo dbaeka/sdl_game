@@ -5,13 +5,14 @@
 #pragma once
 
 #include <vector>
-#include "Math.h"
+#include <GameMath.h>
+#include <cstdint>
 
 class Actor {
 public:
     // Track State of Actor
     enum State {
-        EActive, EPaused, EDead
+        EActive, EPaused, EDead, EInvisible
     };
 
     explicit Actor(class Game *game);
@@ -27,12 +28,18 @@ public:
     // Actor-Specific Update
     virtual void UpdateActor(float deltaTime);
 
+    // Process Input called from Game Class
+    void ProcessInput(const uint8_t *keyState);
+
+    // Overridable input handling for actor
+    virtual void ActorInput(const uint8_t *keyState);
+
     // Getters/Setters
     State GetState() const { return _state; }
 
     void SetState(State state) { _state = state; }
 
-    Vector2 GetPosition() const { return _position; }
+    const Vector2 &GetPosition() const { return _position; }
 
     void SetPosition(const Vector2 &position) { _position = position; }
 
@@ -43,6 +50,8 @@ public:
     float GetRotation() const { return _rotation; }
 
     void SetRotation(float rotation) { _rotation = rotation; }
+
+    Vector2 GetForward() const;
 
     Game *GetGame() const { return _game; }
 

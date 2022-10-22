@@ -31,6 +31,12 @@ public:
 
     void RemoveSprite(class SpriteComponent *sprite);
 
+    void AddAsteroid(class Asteroid *asteroid);
+
+    void RemoveAsteroid(class Asteroid *asteroid);
+
+    std::vector<class Asteroid *> GetAsteroids() const { return _asteroids; }
+
 private:
     // Game related
     std::vector<class Actor *> _actors; // Active actors
@@ -51,6 +57,10 @@ private:
 
     // Game-specific
     class Ship *_ship; // Player's ship
+
+    class SpaceShip *_spaceShip; // Player's SpaceShip
+
+    std::vector<class Asteroid *> _asteroids;
 
     // Helper functions for the game loop
     void ProcessInput();

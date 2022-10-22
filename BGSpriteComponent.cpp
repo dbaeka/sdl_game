@@ -28,7 +28,7 @@ void BGSpriteComponent::Update(float deltaTime) {
 }
 
 void BGSpriteComponent::Draw(SDL_Renderer *renderer) {
-    if (!_BGTextures.empty()) {
+    if (!_BGTextures.empty() && _owner->GetState() != Actor::EInvisible) {
         SDL_Rect r;
         r.w = static_cast<int>(_screenSize.x * _owner->GetScale());
         r.h = static_cast<int>(_screenSize.y * _owner->GetScale());

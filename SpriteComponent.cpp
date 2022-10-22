@@ -5,7 +5,7 @@
 #include "SpriteComponent.h"
 #include "Actor.h"
 #include "Game.h"
-#include "Math.h"
+#include <GameMath.h>
 
 SpriteComponent::SpriteComponent(Actor *owner, int drawOrder) :
         _drawOrder(drawOrder),
@@ -28,7 +28,7 @@ void SpriteComponent::SetTexture(SDL_Texture *texture) {
 }
 
 void SpriteComponent::Draw(SDL_Renderer *renderer) {
-    if (_texture) {
+    if (_texture && _owner->GetState() != Actor::EInvisible) {
         SDL_Rect r;
         r.w = static_cast<int>(_texWidth * _owner->GetScale());
         r.h = static_cast<int>(_texHeight * _owner->GetScale());

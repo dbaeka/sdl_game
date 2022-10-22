@@ -8,12 +8,11 @@
 
 class Ship : public Actor {
 public:
-    Ship(class Game *game);
+    explicit Ship(class Game *game);
 
     void UpdateActor(float deltaTime) override;
 
-    void ProcessKeyboard(const uint8_t *state);
-
+    void ActorInput(const uint8_t *keyState) override;
 
     // Getters
     float GetRightSpeed() const { return _rightSpeed; };

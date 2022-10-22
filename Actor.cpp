@@ -26,7 +26,7 @@ Actor::~Actor() {
 }
 
 void Actor::Update(float deltaTime) {
-    if (_state == EActive) {
+    if (_state == EActive || _state == EInvisible) {
         UpdateComponents(deltaTime);
         UpdateActor(deltaTime);
     }
@@ -59,4 +59,21 @@ void Actor::RemoveComponent(Component *component) {
     if (iter != _components.end()) {
         _components.erase(iter);
     }
+}
+
+Vector2 Actor::GetForward() const {
+    // Negate y-component for SDL
+    return Vector2(Math::Cos(_rotation), -Math::Sin(_rotation));
+}
+
+void Actor::ProcessInput(const uint8_t *keyState) {
+    if (_state == EActive) {
+        for (auto comp: _components) {
+            comp->ProcessInput(keyState);
+        }
+        ActorInput(keyState);
+    }
+}
+
+void Actor::ActorInput(const uint8_t *keyState) {
 }

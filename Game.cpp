@@ -7,8 +7,9 @@
 #include "Actor.h"
 #include "SDL2/SDL_image.h"
 #include "SpriteComponent.h"
-#include "Ship.h"
+#include "SpaceShip.h"
 #include "BGSpriteComponent.h"
+#include "Asteroid.h"
 
 Game::Game() :
         _isRunning(true),
@@ -16,6 +17,7 @@ Game::Game() :
         _window(nullptr),
         _ticksCount(0),
         _ship(nullptr),
+        _spaceShip(nullptr),
         _renderer(nullptr) {
 }
 
@@ -80,8 +82,12 @@ void Game::ProcessInput() {
         _isRunning = false;
     }
 
-    // Process ship input
-    _ship->ProcessKeyboard(keys_state);
+    // Process inputs
+    _updatingActors = true;
+    for (auto actor: _actors) {
+        actor->ProcessInput(keys_state);
+    }
+    _updatingActors = false;
 }
 
 void Game::UpdateGame() {
@@ -186,9 +192,9 @@ SDL_Texture *Game::GetTexture(const std::string &filename) {
 }
 
 void Game::LoadData() {
-    _ship = new Ship(this);
-    _ship->SetPosition(Vector2(100.0f, 384.0f));
-    _ship->SetScale(1.5f);
+    _spaceShip = new SpaceShip(this);
+    _spaceShip->SetPosition(Vector2(100.0f, 384.0f));
+    _spaceShip->SetScale(1.5f);
 
     auto screenSize = Vector2{1024.0, 768.0f};
 
@@ -215,6 +221,12 @@ void Game::LoadData() {
     };
     bg->SetBGTextures(bgTextures);
     bg->SetScrollSpeed(-200.0f);
+
+    // Create asteroids
+    const int numAsteroids = 5;
+    for (int i = 0; i < numAsteroids; i++) {
+        new Asteroid(this);
+    }
 }
 
 void Game::UnloadData() {
@@ -246,4 +258,15 @@ void Game::RemoveSprite(struct SpriteComponent *sprite) {
     // No swapping because of ordering
     auto iter = std::find(_sprites.begin(), _sprites.end(), sprite);
     _sprites.erase(iter);
+}
+
+void Game::AddAsteroid(struct Asteroid *asteroid) {
+    _asteroids.emplace_back(asteroid);
+}
+
+void Game::RemoveAsteroid(struct Asteroid *asteroid) {
+    auto iter = std::find(_asteroids.begin(), _asteroids.end(), asteroid);
+    if (iter != _asteroids.end()) {
+        _asteroids.erase(iter);
+    }
 }

@@ -45,24 +45,24 @@ void Ship::UpdateActor(float deltaTime) {
     SetPosition(pos);
 }
 
-void Ship::ProcessKeyboard(const uint8_t *state) {
+void Ship::ActorInput(const uint8_t *keyState) {
     _rightSpeed = _downSpeed = 0.0f;
 
     // Left / Right
-    if (state[SDL_SCANCODE_A]) {
+    if (keyState[SDL_SCANCODE_A]) {
         _rightSpeed -= 250.0f;
     }
 
-    if (state[SDL_SCANCODE_D]) {
+    if (keyState[SDL_SCANCODE_D]) {
         _rightSpeed += 250.0f;
     }
 
     // Up / Down
-    if (state[SDL_SCANCODE_W]) {
+    if (keyState[SDL_SCANCODE_W]) {
         _downSpeed -= 250.0f;
     }
 
-    if (state[SDL_SCANCODE_S]) {
+    if (keyState[SDL_SCANCODE_S]) {
         _downSpeed += 250.0f;
     }
 }
